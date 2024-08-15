@@ -3,6 +3,8 @@ package com.khalifa.authentification.authentification.Security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -12,11 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.crypto.SecretKey;
+
 
 @Component
 public class JwtTokenUtil {
     
-    private final String secret = "your_secret_key"; // Use a strong secret key
+    private final SecretKey secret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     // Token validity (e.g., 5 hours)
     private final long jwtTokenValidity = 5 * 60 * 60 * 1000;
