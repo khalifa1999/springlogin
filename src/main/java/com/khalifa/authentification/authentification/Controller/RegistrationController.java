@@ -32,5 +32,7 @@ public class RegistrationController {
     public List<MyAppUser> getAppUsers(){
         return myAppUserRepository.findAll();
     }
+
+    
     
 }

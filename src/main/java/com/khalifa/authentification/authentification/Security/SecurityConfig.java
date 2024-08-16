@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.khalifa.authentification.authentification.Service.MyAppUserService;
 
@@ -24,6 +25,9 @@ public class SecurityConfig {
     
     @Autowired
     private MyAppUserService appUserService;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     @Bean
     public UserDetailsService userDetailsService(){
@@ -67,9 +71,10 @@ public class SecurityConfig {
                         connect.requestMatchers("/login").permitAll();
                     })
                     .authorizeHttpRequests(registry ->{
-
+                            // We should add a jwtauthentication filter to check the token and user
                             registry.requestMatchers("/req/signup").permitAll();
-                            registry.anyRequest().authenticated();
+                            registry.anyRequest().authenticated()
+                           .and().addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil, appUserService), UsernamePasswordAuthenticationFilter.class);
                         })
                     .build();
     }

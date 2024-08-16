@@ -31,7 +31,7 @@ public class ContentController {
     public String Login(@RequestBody MyAppUser entity) {
     try {
             UsernamePasswordAuthenticationToken authenticationToken = 
-                new UsernamePasswordAuthenticationToken(entity.getUsername(), entity.getPassword());
+                new UsernamePasswordAuthenticationToken(entity.getEmail(), entity.getPassword());
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
             // If you need to generate a token (like JWT), do it here
