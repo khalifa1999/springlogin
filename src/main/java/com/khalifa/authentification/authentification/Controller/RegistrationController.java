@@ -33,6 +33,6 @@ public class RegistrationController {
         return myAppUserRepository.findAll();
     }
 
-    
+
     
 }
