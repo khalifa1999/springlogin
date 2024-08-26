@@ -14,10 +14,12 @@ import com.khalifa.authentification.authentification.Security.JwtTokenUtil;
 import com.khalifa.authentification.authentification.Service.MyAppUserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 
 @RestController
+@RequestMapping("/api")
 public class ContentController {
     
     @Autowired

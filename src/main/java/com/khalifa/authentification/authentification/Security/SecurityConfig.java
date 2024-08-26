@@ -68,11 +68,11 @@ public class SecurityConfig {
                     //         httpForm.loginPage("/login").permitAll();
                     //     })
                     .authorizeHttpRequests(connect -> {
-                        connect.requestMatchers("/login").permitAll();
+                        connect.requestMatchers("/api/login").permitAll();
                     })
                     .authorizeHttpRequests(registry ->{
                             // We should add a jwtauthentication filter to check the token and user
-                            registry.requestMatchers("/req/signup").permitAll();
+                            registry.requestMatchers("/api/req/signup").permitAll();
                             registry.anyRequest().authenticated()
                            .and().addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil, appUserService), UsernamePasswordAuthenticationFilter.class);
                         })

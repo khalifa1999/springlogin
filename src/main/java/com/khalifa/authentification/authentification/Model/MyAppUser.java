@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+
+// On va ajouter une partie pour les rôles admin et users
 
 @Entity
 public class MyAppUser {
@@ -17,6 +20,15 @@ public class MyAppUser {
     private String email;
     private String password;
 
+    @OneToOne
+    private AppRole role;
+
+    public AppRole getRole() {
+        return role;
+    }
+    public void setRole(AppRole role) {
+        this.role = role;
+    }
     public Long getId() {
         return id;
     }
