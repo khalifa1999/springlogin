@@ -2,8 +2,11 @@ package com.khalifa.authentification.authentification.Model;
 
 import java.sql.Blob;
 
+
+
 import com.khalifa.authentification.authentification.Model.Enumeration.devise;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,13 +23,29 @@ public class Product {
     private Long id;
 
 
+    @Nonnull
     private String product_name;
+
+    @Nonnull
     private float product_price;
+
+    @Nonnull
     private devise devise;
     private Blob product_photo;
+    @Nonnull
+    private int stock;
 
 
 
+    
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
 
     public Blob getProduct_photo() {
         return product_photo;
@@ -66,5 +85,21 @@ public class Product {
 
     public Long getId(){
         return id;
+    }
+
+    public void addToStock(int stock){
+        this.stock += stock;
+    }
+
+    public void removeToStock(int stock){
+        this.stock -= stock;
+    }
+
+    public void addToStock(){
+        this.stock++;
+    }
+
+    public void removeOneToStock(){
+        this.stock--;
     }
 }
