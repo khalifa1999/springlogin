@@ -28,7 +28,7 @@ public class ContentController {
     @Autowired 
     private JwtTokenUtil jwtokenutil;
 
-    //Test
+    
     @PostMapping("/login")
     public String Login(@RequestBody MyAppUser entity) {
     try {
