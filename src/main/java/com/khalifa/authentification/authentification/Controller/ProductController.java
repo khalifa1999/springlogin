@@ -8,6 +8,9 @@ import com.khalifa.authentification.authentification.Model.Product;
 import com.khalifa.authentification.authentification.Model.Enumeration.devise;
 import com.khalifa.authentification.authentification.Repository.ProductRepository;
 import com.khalifa.authentification.authentification.Repository.UserCommandRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,6 +20,7 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,6 +54,7 @@ public class ProductController {
     }
 
     @PostMapping("/product/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> addProduct(@RequestBody Product produit) {
         try{
             Product savedProduct = productRepository.save(produit);
@@ -69,32 +74,38 @@ public class ProductController {
     }
 
 
-    //This method need to be updated
     @PutMapping("/product/update/{id}")
-    public ResponseEntity<Product> updateProduit(@PathVariable Long id, @RequestBody Product product) {        
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Product> updateProduit(@PathVariable Long id, @RequestBody Product product, HttpServletRequest request) { 
+        Logger logger = LoggerFactory.getLogger(ProductController.class);
+        logger.debug("Authorization Header: " + request.getHeader("Authorization"));
+       
         try{
             if(productRepository.existsById(id)){
-                Product updatableProduct = productRepository.findById(Long.valueOf(1)).orElse(null);
-                updatableProduct.setId(id);
-                updatableProduct.setDevise(product.getDevise());
-                updatableProduct.setProduct_name(product.getProduct_name());
-                updatableProduct.setProduct_price(product.getProduct_price());
-                updatableProduct.setProduct_photo(product.getProduct_photo());
-                productRepository.save(updatableProduct);
-                return ResponseEntity.ok().body(product);
-            }else{
+                System.out.println("If condition validated");
+                Product updatableProduct = productRepository.findById(id).orElse(null);
+                if (updatableProduct != null) {
+                    updatableProduct.setDevise(product.getDevise());
+                    updatableProduct.setProduct_name(product.getProduct_name());
+                    updatableProduct.setProduct_price(product.getProduct_price());
+                    updatableProduct.setProduct_photo(product.getProduct_photo());
+                    updatableProduct.setStock(product.getStock());
+                    productRepository.save(updatableProduct);
+                    return ResponseEntity.ok().body(updatableProduct);
+                } else {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+                }
+            } else {
                 return ResponseEntity.notFound().build();
             }
-
-           
-            
-        }catch(Exception e){
-            System.out.println("Exception"+ e);
+        } catch(Exception e){
+            System.out.println("Exception: " + e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
     
     @DeleteMapping("/product/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteMethodName(@PathVariable Long id){
        try {
             if (productRepository.existsById(id)) {
@@ -113,6 +124,7 @@ public class ProductController {
 
 
     @GetMapping("/product/devises")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<devise> getDevise() {
         return Arrays.asList(devise.values());
     }

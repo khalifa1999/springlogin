@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.userdetails.DaoAuthenticationConfigurer;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -73,6 +74,7 @@ public class SecurityConfig {
                     .authorizeHttpRequests(registry ->{
                             // We should add a jwtauthentication filter to check the token and user
                             registry.requestMatchers("/api/req/signup").permitAll();
+                            registry.requestMatchers("/api/product/devises").hasRole("ADMIN");
                             registry.anyRequest().authenticated()
                            .and().addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil, appUserService), UsernamePasswordAuthenticationFilter.class);
                         })

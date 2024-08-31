@@ -83,7 +83,7 @@
 			<version>0.11.5</version>
 		</dependency>
 
-	</dependencies>
+ </dependencies>
 
 	<build>
 		<plugins>

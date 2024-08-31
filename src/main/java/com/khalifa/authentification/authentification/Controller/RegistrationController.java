@@ -10,6 +10,7 @@ import com.khalifa.authentification.authentification.Repository.MyAppUserReposit
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,21 +44,25 @@ public class RegistrationController {
 
 
     @GetMapping(path = "/users")
+    //@PreAuthorize("hasRole('ADMIN')")
     public List<MyAppUser> getAppUsers(){
         return myAppUserRepository.findAll();
     }
 
     @PostMapping("/add/role")
+    @PreAuthorize("hasRole('ADMIN')")
     public AppRole postRole(@RequestBody @Validated AppRole role) {
         return  appRoleRepository.save(role);
     }
 
     @GetMapping("/roles")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<AppRole> getRoles() {
         return appRoleRepository.findAll();
     }
 
     @PutMapping("addroletouser/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MyAppUser> addRoleToUser(@PathVariable String email) {
         Optional<MyAppUser> appUser = myAppUserRepository.findByEmail(email);
 
